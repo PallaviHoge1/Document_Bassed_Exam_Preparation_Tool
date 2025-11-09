@@ -1,119 +1,175 @@
 # 📘 Document_Bassed_Exam_Preparation_Tool
 
-A lightweight Flask application that helps students revise faster:
-1️⃣ **Upload** a study PDF,
-2️⃣ **Summarize** it into concise key points,
-3️⃣ **Generate** multiple-choice quiz questions — **without** using vector databases or RAG.
+**A lightweight AI-powered study assistant** that helps students revise faster —
+📄 **Upload a PDF**, 🧠 **Summarize key concepts**, and 🎯 **Generate multiple-choice quiz questions** —
+all locally using **Ollama** or other LLMs — *no cloud, no API costs!*
 
 ---
 
 ## ✨ Features
 
-* 📄 **PDF ingestion** using PyPDF2 (local-only).
-* 🧠 **LangChain-powered** summarization and quiz generation.
-* ⚙️ **No external dependencies** like FAISS or Pinecone — fully standalone.
-* 💻 **Simple Flask web UI** for easy use and clean workflow.
+* 🧾 **PDF ingestion** using PyPDF2 — extracts clean text from any study document.
+* 🧠 **Local summarization** powered by Ollama (works offline).
+* 🎯 **Automatic quiz generation** with multiple-choice questions (MCQs).
+* 💻 **Simple Flask web interface** — upload → summarize → quiz in 3 clicks.
+* ⚙️ **Extensible backend** — supports Ollama, OpenAI, and Hugging Face models.
+* 🛡️ **Lightweight and private** — no vector DBs, no RAG, no external dependencies.
 
 ---
 
 ## 🧱 Tech Stack
 
-| Component   | Technology                  |
-| ----------- | --------------------------- |
-| Backend     | Flask (Python)              |
-| AI Logic    | LangChain + OpenAI API      |
-| PDF Reading | PyPDF2                      |
-| Frontend    | HTML, CSS, Jinja2 Templates |
-| Config      | python-dotenv               |
-| Testing     | pytest                      |
+| Component              | Technology Used                                    |
+| ---------------------- | -------------------------------------------------- |
+| **Frontend**           | HTML, CSS, Jinja2                                  |
+| **Backend**            | Python (Flask)                                     |
+| **AI Engine**          | Ollama (default), optionally OpenAI / Hugging Face |
+| **PDF Processing**     | PyPDF2                                             |
+| **Environment Config** | python-dotenv                                      |
+| **Testing**            | pytest                                             |
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```
 Document_Bassed_Exam_Preparation_Tool/
 ├─ app/
-│  ├─ __init__.py
-│  ├─ routes.py
+│  ├─ __init__.py               # Flask app setup
+│  ├─ routes.py                 # Main routes (upload, summary, quiz)
 │  ├─ services/
-│  │  ├─ pdf_loader.py          # PDF extraction using PyPDF2
-│  │  ├─ summarizer.py          # Summarization logic using LangChain
-│  │  └─ quiz_generator.py      # Quiz creation logic using LangChain
+│  │  ├─ pdf_loader.py          # PDF extraction logic
+│  │  ├─ summarizer.py          # Summarization using LLMs
+│  │  └─ quiz_generator.py      # Quiz question generation logic
 │  ├─ templates/
-│  │  ├─ base.html              # Shared layout
-│  │  ├─ index.html             # Upload + navigation
-│  │  ├─ summary.html           # Summary view
-│  │  └─ quiz.html              # Quiz question display
+│  │  ├─ base.html              # Common layout
+│  │  ├─ index.html             # Upload UI
+│  │  ├─ summary.html           # Summary page
+│  │  └─ quiz.html              # Quiz question interface
 │  ├─ static/
-│  │  ├─ css/
-│  │  │  └─ styles.css          # Basic UI styling
-│  │  └─ js/
-│  │     └─ app.js              # Small JS interactions
+│  │  ├─ css/styles.css         # Styling
+│  │  └─ js/app.js              # Interactions
 │  └─ utils/
-│     └─ text_clean.py          # Text cleanup utilities
+│     └─ text_clean.py          # Cleans and normalizes extracted text
 ├─ instance/
-│  └─ uploads/                  # Uploaded PDFs (excluded from Git)
-├─ tests/
+│  └─ uploads/                  # Uploaded PDFs (ignored by Git)
+├─ tests/                       # Unit tests
 │  ├─ test_pdf_loader.py
 │  ├─ test_summarizer.py
 │  └─ test_quiz_generator.py
-├─ .env.example                 # Example config file
-├─ .gitignore
-├─ requirements.txt
 ├─ run.py                       # Flask entry point
-├─ README.md
-└─ LICENSE
+├─ requirements.txt             # Dependencies
+├─ .env.example                 # Example environment variables
+├─ .gitignore
+├─ setup_project.sh             # Script to auto-create structure
+└─ README.md
 ```
 
 ---
 
-## 🚀 Quick Start
+## ⚙️ Environment Setup
 
-### 1️⃣ Clone the Repository
+### 🪶 1️⃣ Create `.env`
+
+Copy `.env.example` → `.env`, then update:
+
+```bash
+# For local Ollama (default backend)
+LLM_BACKEND=ollama
+OLLAMA_MODEL=llama3.2:3b
+
+# Optional (for OpenAI or HF use)
+OPENAI_API_KEY=your_key_here
+HUGGINGFACE_API_KEY=your_key_here
+
+# Flask config
+FLASK_ENV=development
+SECRET_KEY=your_secret_here
+```
+
+---
+
+## 🚀 Run Locally
+
+### 1️⃣ Clone the repo
 
 ```bash
 git clone https://github.com/<your-username>/Document_Bassed_Exam_Preparation_Tool.git
 cd Document_Bassed_Exam_Preparation_Tool
 ```
 
-### 2️⃣ Create Virtual Environment & Install Dependencies
+### 2️⃣ Create and activate a virtual environment
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate        # On Windows: .venv\Scripts\activate
+source .venv/bin/activate       # (Windows: .venv\Scripts\activate)
+```
+
+### 3️⃣ Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Configure Environment Variables
-
-Copy `.env.example` → `.env` and set:
-
-```
-OPENAI_API_KEY=your_api_key_here
-FLASK_ENV=development
-SECRET_KEY=your_secret_here
-```
-
-### 4️⃣ Run the Application
+### 4️⃣ Start Flask app
 
 ```bash
 python run.py
 ```
 
-### 5️⃣ Access the App
+Now open your browser at 👉 **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
 
-Open your browser and visit:
+---
 
+## 💡 Using Ollama (Offline Mode)
+
+### 🔹 Install Ollama
+
+Download and install from → [https://ollama.com/download](https://ollama.com/download)
+
+### 🔹 Pull a local model
+
+Choose a small model (works even on CPU):
+
+```bash
+ollama pull llama3.2:3b
 ```
-http://127.0.0.1:5000
+
+### 🔹 Start your app
+
+```bash
+python run.py
 ```
 
-You can now:
+Now the AI runs entirely **offline** — no API keys or internet required 🎉
 
-* Upload your **study PDF**
-* View the **auto-generated summary**
-* Generate **quiz questions** instantly 🎯
+---
+
+## 🧠 How It Works
+
+1. **Upload Document**
+   → PDF text is extracted using PyPDF2 and cleaned.
+
+2. **Summarize Content**
+   → LLM (Ollama, OpenAI, or HF) condenses key ideas into bullet points.
+
+3. **Generate Quiz Questions**
+   → AI creates structured MCQs (4 options, one correct answer).
+
+4. **Review & Practice**
+   → Quiz page displays questions; “Reveal Answer” toggles show correct answers.
+
+---
+
+## 🧩 Supported Backends
+
+| Backend          | Requires Key | Works Offline | Notes                                           |
+| ---------------- | ------------ | ------------- | ----------------------------------------------- |
+| **Ollama**       | ❌ No         | ✅ Yes         | Default and fastest local option                |
+| **OpenAI**       | ✅ Yes        | ❌ No          | Use `gpt-4o-mini` etc.                          |
+| **Hugging Face** | ✅ (free)     | ❌ No          | Works with `zephyr-7b-beta`, `phi-3-mini`, etc. |
+
+Switch by setting `LLM_BACKEND` in `.env`.
 
 ---
 
@@ -125,19 +181,23 @@ pytest
 
 ---
 
-## ⚠️ Notes
+## 🛠 Troubleshooting
 
-* Designed to run **locally**, no external vector DBs.
-* Uses **LangChain prompts** for summarization & question generation.
-* Make sure to keep `instance/uploads/` out of version control (auto gitignored).
+| Issue                 | Likely Cause                  | Fix                                            |
+| --------------------- | ----------------------------- | ---------------------------------------------- |
+| `Failed to summarize` | Model not found / no key      | Verify `.env` or Ollama model pulled           |
+| `Extra data in JSON`  | Model added text outside JSON | Restart app; the parser now trims invalid text |
+| `‘a’ KeyError`        | Quiz options misformatted     | Fixed in latest version (normalizes keys)      |
+| Slow response         | Using 7B+ model on CPU        | Use smaller model (`llama3.2:3b`)              |
 
 ---
 
-## 🧭 Future Enhancements
+## 🧭 Roadmap (Phase 2 Ideas)
 
-* ⏬ Export quiz as CSV/JSON
-* 🧩 Adjustable number/difficulty of questions
-* 🎯 Interactive scoring and “reveal answer” mode
-* 💾 Save quiz sessions for later practice
+* 🧾 **Export quizzes** as CSV / JSON / PDF
+* 🧠 **Adaptive difficulty** (easy/medium/hard)
+* 🧍 **Scoring & practice mode**
+* ⚙️ **Switch model backend from UI**
+* 💾 **Session memory** for previously uploaded documents
 
 ---

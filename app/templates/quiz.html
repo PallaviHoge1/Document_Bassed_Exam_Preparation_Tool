@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Quiz</h2>
+
+  {% if not quiz %}
+    <p>No quiz generated yet.</p>
+    <form action="{{ url_for('main.generate_quiz', job_id=job_id) }}" method="post" class="inline-form">
+      <label>Number of Questions:</label>
+      <input type="number" name="num_questions" value="5" min="3" max="20" />
+      <button type="submit">Generate Quiz</button>
+    </form>
+  {% else %}
+    <ol class="quiz">
+      {% for item in quiz %}
+        <li class="q-item">
+          <div class="q-text">{{ item.question }}</div>
+            <ul class="opts">
+              <li>a) {{ item.options['a'] }}</li>
+              <li>b) {{ item.options['b'] }}</li>
+              <li>c) {{ item.options['c'] }}</li>
+              <li>d) {{ item.options['d'] }}</li>
+            </ul>
+          <button class="reveal" onclick="toggleAnswer(this)">Reveal Answer</button>
+          <div class="answer hidden">Answer: <strong>{{ item.answer|upper }}</strong></div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+
+  <div class="spacer"></div>
+  <a class="link-btn" href="{{ url_for('main.summary', job_id=job_id) }}">Back to Summary</a>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h2>Summary</h2>
+  <pre class="summary">{{ summary }}</pre>
+
+  <form action="{{ url_for('main.generate_quiz', job_id=job_id) }}" method="post" class="inline-form">
+    <label>Number of Questions:</label>
+    <input type="number" name="num_questions" value="5" min="3" max="20" />
+    <button type="submit">Generate Quiz</button>
+  </form>
+
+  <div class="spacer"></div>
+  <a class="link-btn" href="{{ url_for('main.quiz', job_id=job_id) }}">Go to Quiz</a>
+</section>
+{% endblock %}

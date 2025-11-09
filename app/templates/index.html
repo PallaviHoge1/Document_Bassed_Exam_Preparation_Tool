@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h1>Upload Study Document (PDF)</h1>
+  <form action="{{ url_for('main.upload') }}" method="post" enctype="multipart/form-data" class="form">
+    <input type="file" name="document" accept=".pdf" required />
+    <button type="submit">Upload & Generate Summary</button>
+  </form>
+  <p class="hint">After upload, the app will automatically create a concise summary. Then you can generate MCQs.</p>
+</section>
+{% endblock %}
